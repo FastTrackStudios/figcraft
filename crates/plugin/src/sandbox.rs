@@ -41,7 +41,6 @@ pub const IMPORT_MODULE: &str = "figcraft";
 /// The exported entry point.
 pub const ENTRY: &str = "figcraft_run";
 
-
 /// What a run may use.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Limits {

@@ -10,7 +10,6 @@ use super::{ENTRY, Host, IMPORT_MODULE, Limits, PluginError, RunOutput, UiChange
 use crate::manifest::Panel;
 use crate::widget::WidgetRender;
 
-
 /// The host functions: (name, params, results), all i32.
 const IMPORTS: &[(&str, usize, usize)] = &[
     ("call", 4, 1),
@@ -28,7 +27,6 @@ const IMPORTS: &[(&str, usize, usize)] = &[
     ("widget_render", 2, 1),
     ("save_file", 6, 1),
 ];
-
 
 /// A host call that needs the [`Host`]: the plugin is paused while the host answers it (see
 /// [`Instance::call`]), so the store never borrows the host and can outlive one call.
