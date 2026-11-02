@@ -8,6 +8,11 @@ description = "FigCraft plugins: the plugin manifest and the WebAssembly sandbox
 [lints]
 workspace = true
 
+[features]
+# The wasmi sandbox that runs plugin modules. Off: the manifest, bundle and widget types stay, and no module runs.
+default = ["sandbox"]
+sandbox = ["dep:wasmi"]
+
 [dependencies]
 figcraft-color = { workspace = true }
 serde = { workspace = true }
@@ -15,7 +20,7 @@ serde_json = { workspace = true }
 # A bundle's SHA-256 (plugin directories list it; the app checks downloads against it).
 sha2 = { workspace = true }
 thiserror = { workspace = true }
-wasmi = { workspace = true }
+wasmi = { workspace = true, optional = true }
 
 [dev-dependencies]
 wat = { workspace = true }

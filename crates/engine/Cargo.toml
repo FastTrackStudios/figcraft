@@ -8,6 +8,18 @@ description = "FigCraft engine: sessions, undo history, the command registry eve
 [lints]
 workspace = true
 
+[features]
+# Upstream's defaults. A host that only edits documents (Frame) turns these off.
+default = ["pdf", "plugins", "font-download", "vectordrawable"]
+# PDF export (krilla).
+pdf = ["dep:figcraft-pdf"]
+# Running wasm plugins (wasmi). The plugin and widget types stay either way.
+plugins = ["figcraft-plugin/sandbox"]
+# Downloading a missing font (craft-font-store, desktop only).
+font-download = ["dep:craft-font-store", "dep:craft-font-catalog"]
+# Android VectorDrawable export.
+vectordrawable = ["dep:figcraft-vectordrawable"]
+
 [dependencies]
 figcraft-geom = { workspace = true }
 figcraft-color = { workspace = true }
@@ -19,8 +31,8 @@ figcraft-pathops = { workspace = true }
 figcraft-render = { workspace = true }
 figcraft-format = { workspace = true }
 figcraft-svg = { workspace = true }
-figcraft-pdf = { workspace = true }
-figcraft-vectordrawable = { workspace = true }
+figcraft-pdf = { workspace = true, optional = true }
+figcraft-vectordrawable = { workspace = true, optional = true }
 craft-docpath = { workspace = true }
 figcraft-plugin = { workspace = true }
 serde = { workspace = true }
@@ -36,10 +48,12 @@ web-time = "1.1.0"
 # Downloading a missing font (desktop only; the web keeps its built-in fonts). The bundled index
 # (~620 KB) lets the Missing fonts window tell which fonts can be downloaded without a request.
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-craft-font-store = { workspace = true, features = ["bundled-index"] }
-craft-font-catalog = { workspace = true }
+craft-font-store = { workspace = true, features = ["bundled-index"], optional = true }
+craft-font-catalog = { workspace = true, optional = true }
 
 [dev-dependencies]
+figcraft-pdf = { workspace = true }
+figcraft-vectordrawable = { workspace = true }
 zip = { workspace = true }
 wat = { workspace = true }
 image = { workspace = true }

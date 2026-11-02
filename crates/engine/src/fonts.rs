@@ -1,3 +1,4 @@
+// Modified by FastTrackStudios: Cargo features to leave out wasmi, krilla, craft-font-store and vectordrawable (see FORK.md).
 //! Fonts a document names that this machine doesn't have (#752): text layers, their styled
 //! ranges, text styles and the string variables bound to a font family. Text in such a family
 //! is drawn in a fallback font, so the user is told which ones are missing. Once such a font is
@@ -80,11 +81,11 @@ pub enum Download {
     Failed(String),
 }
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(all(not(target_arch = "wasm32"), feature = "font-download"))]
 pub use download::{allow_downloads, downloads, downloads_allowed, source};
 
-/// The browser keeps its built-in fonts: nothing is downloaded there.
-#[cfg(target_arch = "wasm32")]
+/// The browser (and a build without `font-download`) keeps its built-in fonts: nothing is downloaded.
+#[cfg(not(all(not(target_arch = "wasm32"), feature = "font-download")))]
 mod no_download {
     pub fn source(_: &str) -> Option<String> {
         None
@@ -99,7 +100,7 @@ mod no_download {
         Err("fonts aren't downloaded in the browser".into())
     }
 }
-#[cfg(target_arch = "wasm32")]
+#[cfg(not(all(not(target_arch = "wasm32"), feature = "font-download")))]
 pub use no_download::{allow_downloads, downloads, downloads_allowed, source};
 
 /// Every string value of variable `id` in any mode, following aliases (each variable once).
@@ -196,12 +197,12 @@ pub fn specs() -> Vec<CommandSpec> {
             refit_text
         ),
     ];
-    #[cfg(not(target_arch = "wasm32"))]
+    #[cfg(all(not(target_arch = "wasm32"), feature = "font-download"))]
     list.extend(download::specs());
     list
 }
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(all(not(target_arch = "wasm32"), feature = "font-download"))]
 pub mod download;
 
 #[cfg(test)]

@@ -1,3 +1,4 @@
+// Modified by FastTrackStudios: Cargo features to leave out wasmi, krilla, craft-font-store and vectordrawable (see FORK.md).
 //! File menu: documents, save/open, import/export, versions.
 
 use std::sync::Arc;
@@ -385,6 +386,9 @@ pub fn export_file(doc: &Document, ids: &[NodeId], setting: &ExportSetting, scal
             Ok((svg.into_bytes(), Vec::new()))
         }
         // Android colours are sRGB too.
+        #[cfg(not(feature = "vectordrawable"))]
+        ExportFormat::VectorDrawable => Err(EngineError::Other("VectorDrawable export isn't built into this program".into())),
+        #[cfg(feature = "vectordrawable")]
         ExportFormat::VectorDrawable => {
             let compat = match setting.vd_compat {
                 VdCompat::BestEffort => figcraft_vectordrawable::Compat::BestEffort,

@@ -1,3 +1,4 @@
+// Modified by FastTrackStudios: Cargo features to leave out wasmi, krilla, craft-font-store and vectordrawable (see FORK.md).
 use super::load::{ext, write};
 use super::save::thumbnail;
 use super::*;
@@ -365,8 +366,16 @@ pub(super) fn export_layers(s: &mut Session, p: &Value) -> Result<Value> {
 /// A PDF with one page per group of layers (an sRGB document), titled after the file; `area`
 /// sizes a single page to that page area instead of the layers' bounds.
 pub(super) fn pdf_bytes(doc: &Document, groups: &[Vec<NodeId>], print: &PrintSettings, area: Option<figcraft_geom::Rect>) -> Result<Vec<u8>> {
-    let opts = figcraft_pdf::PdfOptions { title: Some(doc.name.clone()), print: *print, area, ..Default::default() };
-    figcraft_pdf::export_groups(doc, groups, &opts).map_err(|e| EngineError::Other(e.to_string()))
+    #[cfg(feature = "pdf")]
+    {
+        let opts = figcraft_pdf::PdfOptions { title: Some(doc.name.clone()), print: *print, area, ..Default::default() };
+        figcraft_pdf::export_groups(doc, groups, &opts).map_err(|e| EngineError::Other(e.to_string()))
+    }
+    #[cfg(not(feature = "pdf"))]
+    {
+        let _ = (doc, groups, print, area);
+        Err(EngineError::Other("PDF export isn't built into this program".into()))
+    }
 }
 
 /// Every top-level frame of `page` (reading order) as one PDF page each, and the page count.

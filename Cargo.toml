@@ -31,7 +31,7 @@ figcraft-engine = { path = "crates/engine" }
 figcraft-ui-egui = { path = "crates/ui-egui" }
 figcraft-mcp = { path = "crates/mcp" }
 figcraft-collab-net = { path = "crates/collab-net" }
-figcraft-plugin = { path = "crates/plugin" }
+figcraft-plugin = { path = "crates/plugin", default-features = false }
 
 # Keep coupled craft-libs crates on one rev. craft-update has no sibling-crate
 # dependencies and is pinned separately for the suite updater rollout.
